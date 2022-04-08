@@ -1,0 +1,131 @@
+#! /usr/bin/env ruby
+
+# frozen_string_literal: true
+
+if $PROGRAM_NAME == __FILE__
+  require "bundler/setup"
+end
+
+require "commander"
+require "snapshot_archive"
+
+module SnapshotArchive
+  class CommanderCli
+    include Commander::Methods
+
+    def run
+      SnapshotArchive::Cfg.load
+
+      program(:name, "SnapshotArchive")
+      program(:version, SnapshotArchive::VERSION)
+      program(:description, SnapshotArchive::DESCRIPTION)
+      global_option('--verbose') { Cfg.instance.shell = Shell.new(verbose: true) }
+
+      command(:backup) do |c|
+        c.syntax = "snap backup [store(s)]"
+        c.description = <<~TXT
+          Save a snapshot that can be restored later.
+
+          By default, will use the active stores that have been configured. The
+          stores used for the snapshot can be overridden by passing them as args
+          to the command. Each store can also be passed arguments for
+          snapshotting from the CLI. Examples below:
+
+          # Uses your EDITOR to add details for the snapshot.
+          # Uses the default configured "stores" for creating the snapshot
+          snap backup
+
+          # Add a message from the command line:
+          snap backup --message "Add message from command line"
+          snap backup -m "Add message from command line"
+
+          # Override which stores are used for the snapshot
+          snap backup store_1 store_2
+
+          # Pass arguments to a store
+          snap backup mysql:db_1,db_2
+        TXT
+
+        c.option "-m MESSAGE", "--message MESSAGE", String, "Description"
+
+        c.action do |args, options|
+          message = (
+            if options.message
+              options.message.strip
+            else
+              ask_editor(File.read(File.join(__dir__, "../lib/template.txt")))
+                .split("\n")
+                .reject { |l| l.match(/\A#|\A\n/) }
+                .join("\n")
+                .strip
+            end
+          )
+
+          stores = (
+            if args.count > 0
+              args.map { |arg| SnapshotArchive::Cfg.parse_store(arg) }.to_h
+            else
+              SnapshotArchive::Cfg.stores
+            end
+          )
+
+          SnapshotArchive::Cli.backup(
+            msg: message,
+            stores: stores
+          )
+        end
+
+      end
+
+      command(:restore) do |c|
+        c.syntax = "snap restore ID"
+        c.description = "Restore the state of the databases."
+
+        c.action do |args, _options|
+          raise "exactly one ID required" unless args.count == 1
+
+          SnapshotArchive::Cli.restore(
+            id: args.first
+          )
+        end
+      end
+
+      command(:list) do |c|
+        c.syntax = "snap list"
+        c.description = "List available snapshots"
+
+        c.action do |_args, options|
+          SnapshotArchive::Cli.list
+        end
+      end
+
+      command(:show) do |c|
+        c.syntax = "snap show"
+        c.description = "Show full message for snapshot"
+
+        c.action do |args, options|
+          raise "exactly one id is required" unless args.length == 1
+
+          SnapshotArchive::Cli.show(args.first)
+        end
+      end
+
+      command(:rm) do |c|
+        c.syntax = "snap rm"
+        c.description = "Delete an snapshot"
+
+        c.action do |args, options|
+          raise "exactly one id is required" unless args.length == 1
+
+          SnapshotArchive::Cli.delete(args.first)
+        end
+      end
+
+      default_command(:list)
+
+      run!
+    end
+  end
+end
+
+SnapshotArchive::CommanderCli.new.run

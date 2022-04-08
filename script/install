@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -ex
+
+gemname='snapshot_archive'
+
+gem uninstall -Ix ${gemname}
+gem build ${gemname}.gemspec
+gemfile=${gemname}-"$(grep -oEi '\d+\.\d+\.\d+' lib/${gemname}/version.rb)".gem
+gem install "${gemfile}"
+rm "${gemfile}"

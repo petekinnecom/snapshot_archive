@@ -1,0 +1,5 @@
+
+
+# Follows same rules as a git commit message. First line is summary, followed by
+# more detailed info. Set `export EDITOR="..."` to use a different editor for
+# this message. (eg. `export EDITOR="code --wait"` to use VSCode)

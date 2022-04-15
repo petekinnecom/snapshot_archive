@@ -23,6 +23,7 @@ module SnapshotArchive
 
       command(:backup) do |c|
         c.syntax = "snap backup [store(s)]"
+        c.summary = "Save a snapshot that can be restored later"
         c.description = <<~TXT
           Save a snapshot that can be restored later.
 

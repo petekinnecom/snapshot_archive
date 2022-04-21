@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    snapshot_archive (0.2.0)
+    snapshot_archive (0.4.0)
       commander (~> 4.5)
 
 GEM

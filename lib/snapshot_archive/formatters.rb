@@ -42,6 +42,9 @@ module SnapshotArchive
           path: #{dir}
           ----------------------
           #{message}
+
+          Full metadata:
+          #{JSON.pretty_generate(metadata.dig("archive", "stores"))}
         TXT
       end
     end

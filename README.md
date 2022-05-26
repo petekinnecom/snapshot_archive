@@ -6,6 +6,8 @@ snapshot and restore it later! Build your own snapshotting behavior in a
 configuration file so that you can snapshot any stateful service you use during
 development.
 
+By default will backup any development databases for the rails app in your CWD.
+
 ## Installation
 
 ```

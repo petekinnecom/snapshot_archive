@@ -6,7 +6,7 @@ snapshot and restore it later! Build your own snapshotting behavior in a
 configuration file so that you can snapshot any stateful service you use during
 development.
 
-By default will make mysql backups for any development databases for the rails 
+By default will make mysql backups for any development databases for the rails
 app in your CWD.
 
 ## Installation
@@ -155,5 +155,8 @@ SnapshotArchive.configure do |config|
   #   snap backup mysql:db_1,db_2
 
   config.register_store("my_backup", "mysql:db_1,db_2")
+
+  # You can also alias an array of stores:
+  config.register_store("my_backup_2", ["mysql:db_1,db_2", "other_stuff"])
 end
 ```

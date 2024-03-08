@@ -64,7 +64,11 @@ module SnapshotArchive
 
           stores = (
             if args.count > 0
-              args.map { |arg| SnapshotArchive::Cfg.parse_store(arg) }.to_h
+              args
+                .map { |arg| SnapshotArchive::Cfg.resolve_alias(arg) }
+                .flatten
+                .map { |arg| SnapshotArchive::Cfg.parse_store(arg) }
+                .to_h
             else
               SnapshotArchive::Cfg.stores
             end

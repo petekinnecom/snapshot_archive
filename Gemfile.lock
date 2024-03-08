@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    snapshot_archive (0.5.0)
+    snapshot_archive (0.7.0)
       commander (~> 4.5)
 
 GEM
@@ -33,6 +33,7 @@ GEM
     unicode-display_width (2.1.0)
 
 PLATFORMS
+  aarch64-linux
   x86_64-darwin-19
   x86_64-darwin-20
 

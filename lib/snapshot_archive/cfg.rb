@@ -40,6 +40,7 @@ module SnapshotArchive
       [
         :bind_backup,
         :load,
+        :resolve_alias,
         :parse_store,
         :pwd,
         :repository,
@@ -63,6 +64,14 @@ module SnapshotArchive
 
       require("snapshot_archive/default_configuration")
       Kernel.load(config_path) if File.exist?(config_path)
+    end
+
+    def resolve_alias(name)
+      if store_registry[name].is_a?(Array)
+        store_registry[name]
+      else
+        name
+      end
     end
 
     def register_store(name, klass_or_alias=nil, active_by_default: true, &block)

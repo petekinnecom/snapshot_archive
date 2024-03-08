@@ -42,6 +42,27 @@ module SnapshotArchive
       end
     end
 
+    class Delete
+      def self.call(metadata)
+        new(metadata).call
+      end
+
+      attr_reader :metadata
+      def initialize(metadata)
+        @metadata = metadata
+      end
+
+      def call
+        metadata.fetch("stores").each do |store_metadata|
+          store = Cfg.instance.store(store_metadata.fetch("type"))
+          if store.respond_to?(:delete)
+            store.delete(store_metadata)
+          end
+        end
+      end
+    end
+
+
     class Presenter
       def self.call(metadata)
         new(metadata).call

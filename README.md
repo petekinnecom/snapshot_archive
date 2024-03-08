@@ -113,6 +113,17 @@ SnapshotArchive.configure do |config|
   #  restore: accepts the metadata JSON data created when making the backup. No
   #    return value.
   #
+  # Stores can optionally define:
+  #
+  #  delete: accepts the metadata JSON data created when making the backup. No
+  #    return value. Invoked when the snapshot is deleted. If your backup method
+  #    stores all of its data inside the snapshot directory, then no delete
+  #    method is needed because the snapshot directory will be deleted. However,
+  #    if your backup stores data in a different directory, then this hook can
+  #    be used to cleanup that data. Eg, your method might write some data to
+  #    an external or synced directory. In that case, you probably want to save
+  #    the path to the file in the metadata, and try to delete it in this hook.
+  #
   # Stores can either be defined as objects/classes/modules or a builtin store
   # builder can be used.
 

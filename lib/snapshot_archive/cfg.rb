@@ -4,17 +4,22 @@ require "snapshot_archive/repositories"
 module SnapshotArchive
   class StoreBuilder
     class CustomStore
-      def initialize(backup:, restore:)
+      def initialize(backup:, restore:, delete:)
         @backup = backup
         @restore = restore
+        @delete = delete
       end
 
       def backup(dir)
-        @backup.call(dir)
+        @backup&.call(dir)
       end
 
       def restore(metadata)
-        @restore.call(metadata)
+        @restore&.call(metadata)
+      end
+
+      def delete(metadata)
+        @delete&.call(metadata)
       end
     end
 
@@ -26,8 +31,12 @@ module SnapshotArchive
       @restore = block
     end
 
+    def delete(&block)
+      @delete = block
+    end
+
     def to_store
-      CustomStore.new(backup: @backup, restore: @restore)
+      CustomStore.new(backup: @backup, restore: @restore, delete: @delete)
     end
   end
 

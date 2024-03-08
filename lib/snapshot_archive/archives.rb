@@ -35,7 +35,7 @@ module SnapshotArchive
       end
 
       def call
-        metadata.fetch("stores").each do |store_metadata|
+        metadata.fetch("stores").reverse.each do |store_metadata|
           store = Cfg.instance.store(store_metadata.fetch("type"))
           store.restore(store_metadata)
         end

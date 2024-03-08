@@ -14,7 +14,12 @@ module SnapshotArchive
       def call
         stores_metadata = (
           stores
-            .map { |name, store| store.backup(dir)&.merge(type: name) }
+            .map { |name, store|
+              File
+                .join(dir, name)
+                .tap { FileUtils.mkdir(_1) }
+                .then { store.backup(_1)&.merge(type: name) }
+            }
             .compact
         )
 

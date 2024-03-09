@@ -43,7 +43,7 @@ module SnapshotArchive
       def call
         metadata.fetch("stores").reverse.each do |store_metadata|
           store = Cfg.instance.store(store_metadata.fetch("type"))
-          store.restore(store_metadata)
+          store.restore(metadata: store_metadata)
         end
       end
     end
@@ -62,7 +62,7 @@ module SnapshotArchive
         metadata.fetch("stores").each do |store_metadata|
           store = Cfg.instance.store(store_metadata.fetch("type"))
           if store.respond_to?(:delete)
-            store.delete(store_metadata)
+            store.delete(metadata: store_metadata)
           end
         end
       end

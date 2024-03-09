@@ -67,8 +67,10 @@ module SnapshotArchive
       end
 
       def delete(id)
-        metadata = JSON.parse(File.read(File.join(path, id, "metadata.json")))
-        raise ArgumentError.new("unknown snapshot: #{id}") unless File.exist?(metadata)
+        dir = File.join(path, id)
+        md_path = File.join(dir, "metadata.json")
+        raise ArgumentError.new("unknown snapshot: #{id}") unless File.exist?(md_path)
+        metadata = JSON.parse(File.read(md_path))
 
         Cfg.shell.info("Running delete hooks: #{id}")
         Archives::Delete.call(metadata.dig("archive"))

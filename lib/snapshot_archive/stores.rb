@@ -9,8 +9,8 @@ module SnapshotArchive
         @args = args
       end
 
-      def backup(dir:, id:)
-        store.backup(dir: dir, id: id, args: args)
+      def backup(**opts)
+        store.backup(args: args, **opts)
       end
 
       def restore(...)

@@ -19,7 +19,7 @@ module SnapshotArchive
               File
                 .join(dir, name)
                 .tap { FileUtils.mkdir(_1) }
-                .then { store.backup(dir: _1, id: id)&.merge(type: name) }
+                .then { store.backup(dir: _1, id: id, name: name)&.merge(type: name) }
             }
             .compact
         )

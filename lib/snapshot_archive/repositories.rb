@@ -21,6 +21,7 @@ module SnapshotArchive
         else
           metadata = {
             __schema__: SCHEMA,
+            __gem_version__: SnapshotArchive::VERSION,
             id: id,
             message: msg,
             timestamp: timestamp.utc.iso8601,

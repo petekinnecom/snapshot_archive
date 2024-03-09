@@ -1,14 +1,15 @@
 module SnapshotArchive
   module Archives
     class Builder
-      def self.call(dir:, stores:)
-        new(dir, stores).call
+      def self.call(dir:, stores:, id:)
+        new(dir, stores, id).call
       end
 
-      attr_reader :dir, :stores
-      def initialize(dir, stores)
+      attr_reader :dir, :stores, :id
+      def initialize(dir, stores, id)
         @dir = dir
         @stores = stores
+        @id = id
       end
 
       def call
@@ -18,7 +19,7 @@ module SnapshotArchive
               File
                 .join(dir, name)
                 .tap { FileUtils.mkdir(_1) }
-                .then { store.backup(_1)&.merge(type: name) }
+                .then { store.backup(dir: _1, id: id)&.merge(type: name) }
             }
             .compact
         )

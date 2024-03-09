@@ -10,16 +10,16 @@ module SnapshotArchive
         @delete = delete
       end
 
-      def backup(dir)
-        @backup&.call(dir)
+      def backup(...)
+        @backup&.call(...)
       end
 
-      def restore(metadata)
-        @restore&.call(metadata)
+      def restore(...)
+        @restore&.call(...)
       end
 
-      def delete(metadata)
-        @delete&.call(metadata)
+      def delete(...)
+        @delete&.call(...)
       end
     end
 

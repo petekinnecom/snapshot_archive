@@ -130,14 +130,14 @@ SnapshotArchive.configure do |config|
   # Using an object:
 
   class MyCustomStore
-    def backup(dir, args=[])
+    def backup(dir:, id:, args: [])
       path = File.join(dir, "my_custom_store.txt")
       File.write(path, "received args: #{args}")
 
       { "path" => path }
     end
 
-    def restore(metadata)
+    def restore(metadata:)
       puts(File.read(metadata.fetch("path")))
     end
   end
@@ -148,14 +148,14 @@ SnapshotArchive.configure do |config|
   # Using the store builder:
 
   config.register_store("my_custom_store") do |store|
-    store.backup do |dir, args=[]|
+    store.backup do |dir:, id:, args: []|
       path = File.join(dir, "my_custom_store.txt")
       File.write(path, "received args: #{args}")
 
       { "path" => path }
     end
 
-    store.restore do |metadata|
+    store.restore do |metadata:|
       puts(File.read(metadata.fetch("path")))
     end
   end

@@ -12,7 +12,7 @@ module SnapshotArchive
         timestamp = Time.now
         dir = mkdir(id)
 
-        archive_metadata = Archives::Builder.call(dir: dir, stores: stores)
+        archive_metadata = Archives::Builder.call(id: id, dir: dir, stores: stores)
 
         Cfg.shell.debug("Using stores: #{stores.keys.join(", ")}")
 

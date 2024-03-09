@@ -9,35 +9,40 @@ module SnapshotArchive
         @args = args
       end
 
-      def backup(dir)
-        store.backup(dir, args)
+      def backup(dir:, id:)
+        store.backup(dir: dir, id: id, args: args)
       end
 
-      def restore(metadata)
-        store.restore(metadata)
+      def restore(...)
+        store.restore(...)
+      end
+
+      def delete(...)
+        store.delete(...)
       end
     end
 
     module Mysql
       class << self
-        def backup(dir, args)
-          Backup.call(dir, args)
+        def backup(...)
+          Backup.call(...)
         end
 
-        def restore(metadata)
-          Restore.call(metadata)
+        def restore(...)
+          Restore.call(...)
         end
       end
 
       class Backup
-        def self.call(dir, names)
-          new(dir, names).call
+        def self.call(...)
+          new(...).call
         end
 
-        attr_reader :dir, :names
-        def initialize(dir, names)
+        attr_reader :dir, :names, :id
+        def initialize(dir:, id:, args:)
           @dir = dir
-          @names = names
+          @id = id
+          @names = args
         end
 
         def call
@@ -61,12 +66,12 @@ module SnapshotArchive
       end
 
       class Restore
-        def self.call(metadata)
-          new(metadata).call
+        def self.call(...)
+          new(...).call
         end
 
         attr_reader :metadata
-        def initialize(metadata)
+        def initialize(metadata:)
           @metadata = metadata
         end
 

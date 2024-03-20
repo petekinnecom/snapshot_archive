@@ -6,7 +6,7 @@ SnapshotArchive.configure do |config|
   )
 
   config.register_store("mysql_rails") do |store|
-    store.backup do |dir, _args|
+    store.backup do |*args, **opts|
       existing_databases = (
         config
           .shell
@@ -26,11 +26,11 @@ SnapshotArchive.configure do |config|
 
       next if db_names.empty?
 
-      SnapshotArchive::Cfg.bind_backup("mysql", db_names).backup(dir)
+      SnapshotArchive::Cfg.bind_backup("mysql", db_names).backup(*args, **opts)
     end
 
     store.restore do |metadata|
-      SnapshotArchive::Cfg.store("mysql").restore(metadata)
+      SnapshotArchive::Cfg.store("mysql").restore(metadata: metadata)
     end
   end
 

@@ -39,7 +39,7 @@ module SnapshotArchive
         end
 
         attr_reader :dir, :names, :id
-        def initialize(dir:, id:, args:)
+        def initialize(dir:, id:, args:, **)
           @dir = dir
           @id = id
           @names = args

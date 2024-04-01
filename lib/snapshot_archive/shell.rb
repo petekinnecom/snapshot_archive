@@ -16,9 +16,9 @@ module SnapshotArchive
     def run(cmd)
       debug(cmd)
 
-      `#{cmd}`
+      `#{cmd} 2>&1`
         .split("\n")
-        .tap { raise CommandFailureError.new(cmd) unless $? == 0 }
+        .tap { raise CommandFailureError.new([cmd, _1].join("\n---\n")) unless $? == 0 }
     end
 
     def warn(msg)

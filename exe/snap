@@ -98,9 +98,22 @@ module SnapshotArchive
       command(:list) do |c|
         c.syntax = "snap list"
         c.description = "List available snapshots"
+        c.option(
+          "-o NUMBER_OF_DAYS",
+          "--older-than-days NUMBER_OF_DAYS",
+          Numeric,
+          <<~TXT
+            Limit the list to snapshots older than NUMBER_OF_DAYS days. This can
+            be useful for identifying old snapshots to delete.
+
+            Defaults to 0.
+          TXT
+        )
 
         c.action do |_args, options|
-          SnapshotArchive::Cli.list
+          options.default(older_than_days: 0)
+
+          SnapshotArchive::Cli.list(older_than_days: options.older_than_days)
         end
       end
 

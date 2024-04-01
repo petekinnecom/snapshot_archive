@@ -22,8 +22,8 @@ module SnapshotArchive
         Cfg.repository.restore(id)
       end
 
-      def list
-        Cfg.repository.list
+      def list(...)
+        Cfg.repository.list(...)
       end
 
       def show(id)

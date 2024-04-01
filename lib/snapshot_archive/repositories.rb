@@ -42,13 +42,16 @@ module SnapshotArchive
         Cfg.shell.info("Restored snapshot: #{id}")
       end
 
-      def list
+      def list(older_than_days:)
         snapshots = (
           Dir
             .glob(File.join(path, "**/metadata.json"))
             .map { |metadata| JSON.parse(File.read(metadata)) }
             .sort_by { |metadata| metadata.fetch("timestamp") }
             .reverse
+            .select { |m|
+              Time.parse(m.fetch("timestamp")) < (Time.now - (older_than_days.to_i * 24 * 60 * 60))
+            }
         )
 
         if snapshots.count > 0
@@ -56,7 +59,7 @@ module SnapshotArchive
             Formatters::List.call(metadata)
           end
         else
-          Cfg.shell.info("No snapshots in archive")
+          Cfg.shell.info("No snapshots found")
         end
       end
 

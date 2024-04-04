@@ -29,7 +29,7 @@ SnapshotArchive.configure do |config|
       SnapshotArchive::Cfg.bind_backup("mysql", db_names).backup(*args, **opts)
     end
 
-    store.restore do |metadata|
+    store.restore do |metadata:|
       SnapshotArchive::Cfg.store("mysql").restore(metadata: metadata)
     end
   end
